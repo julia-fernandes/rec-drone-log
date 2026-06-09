@@ -1,6 +1,10 @@
 package org.example.dronelog.dto;
 
 public record PilotoResponseDTO(
-        //TODO: colocar atributos de resposta.
-) {
-}
+
+        Long idPiloto,
+        String nome,
+        Integer registroAnac,
+        String email,
+        Boolean ativo
+) {}
