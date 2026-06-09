@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface DroneRepository extends JpaRepository<Drone, Long> {
 
-    // TODO: garantir que as consultas estão de acordo.
     List<Drone> findByDisponivel(Boolean disponivel);
 }
