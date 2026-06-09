@@ -1,12 +1,21 @@
 package org.example.dronelog.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@Table(name = "TBMISSAO")
 public class MissaoVoo {
 
-    //TODO: garantir integridade de PK para os registros da entidade.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMissao;
 
     private String titulo;
@@ -20,14 +29,13 @@ public class MissaoVoo {
     @Enumerated(EnumType.STRING)
     private StatusMissao status;
 
-    // TODO: relacionar corretamente com o responsável pela operação.
-    @JoinColumn(name = "")
+
+    @JoinColumn(name = "idPiloto")
     private Piloto piloto;
 
-    // TODO: relacionar corretamente com o equipamento/drone utilizado.
 
-    public MissaoVoo() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "idDrone")
+    private Drone drone;
 
-    // TODO: completar os métodos de acesso necessários para uso nas camadas da API.
 }
