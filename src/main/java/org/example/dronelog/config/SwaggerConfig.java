@@ -10,11 +10,10 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        // TODO: deixar a documentação compatível com o tema da API.
         return new OpenAPI()
                 .info(new Info()
-                        .title("")
+                        .title("Drones")
                         .version("1.0")
-                        .description(""));
+                        .description("Rotas para gerenciamento de drones"));
     }
 }

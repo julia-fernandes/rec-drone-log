@@ -18,7 +18,25 @@ public class DroneService {
         this.droneRepository = droneRepository;
     }
 
-    public List<DroneResponseDTO> listar(Boolean disponivel) {
+    //conversão para ResponseDTO OK
+    private DroneResponseDTO toResponse(Drone drone) {
+
+        return new DroneResponseDTO(
+                drone.getIdDrone(),
+                drone.getIdentificador(),
+                drone.getModelo(),
+                drone.getAutonomiaMinutos(),
+                drone.getDisponivel()
+        );
+    }
+
+    public Drone buscarEntidadeDrone(Long id) {
+        return droneRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Drone não encontrado."));
+    }
+
+
+    public List<DroneResponseDTO> listarDroneDisponivel(Boolean disponivel) {
         List<Drone> drones;
 
         if (disponivel == null) {
@@ -31,10 +49,11 @@ public class DroneService {
     }
 
     public DroneResponseDTO buscarPorId(Long id) {
-        return toResponse(buscarDrone(id));
+        return toResponse(buscarEntidadeDrone(id));
     }
 
     public DroneResponseDTO cadastrar(DroneRequestDTO dto) {
+
         Drone drone = new Drone();
         drone.setIdentificador(dto.identificador());
         drone.setModelo(dto.modelo());
@@ -45,35 +64,24 @@ public class DroneService {
     }
 
     public DroneResponseDTO atualizar(Long id, DroneRequestDTO dto) {
-        Drone drone = buscarDrone(id);
+        Drone drone = buscarEntidadeDrone(id);
 
-        // TODO: revisar quais campos precisam entrar na atualização.
         drone.setIdentificador(dto.identificador());
+        drone.setModelo(dto.modelo());
+        drone.setAutonomiaMinutos(dto.autonomiaMinutos());
+        drone.setDisponivel(dto.disponivel());
+
 
         return toResponse(droneRepository.save(drone));
     }
 
     public void deletar(Long id) {
-        Drone drone = buscarDrone(id);
-        // TODO: pensar no histórico antes da remoção.
-        droneRepository.delete(drone);
-    }
+        Drone drone = buscarEntidadeDrone(id);
 
-    public Drone buscarDrone(Long id) {
-        return droneRepository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Drone não encontrado."));
-    }
+        if(drone.getMissoes().isEmpty()){
+            droneRepository.delete(drone);
 
-    private DroneResponseDTO toResponse(Drone drone) {
-        return new DroneResponseDTO(
-                drone.getIdDrone(),
-                //TODO: buscar atributos do drone conforme registro.
-                null,
-                null,
-                null,
-                null
-
-
-        );
+        }
+        droneRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("*Drone possui histórico de missões"));
     }
 }

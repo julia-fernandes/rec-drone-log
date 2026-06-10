@@ -29,7 +29,7 @@ public class MissaoVoo {
     @Enumerated(EnumType.STRING)
     private StatusMissao status;
 
-
+    @ManyToOne
     @JoinColumn(name = "idPiloto")
     private Piloto piloto;
 

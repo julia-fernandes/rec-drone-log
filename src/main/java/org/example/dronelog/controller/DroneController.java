@@ -7,6 +7,7 @@ import org.example.dronelog.dto.DroneResponseDTO;
 import org.example.dronelog.service.DroneService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class DroneController {
     @Operation(summary = "Lista todos os drones")
     @GetMapping
     public List<DroneResponseDTO> listar(@RequestParam(required = false) Boolean disponivel) {
-        return droneService.listar(disponivel);
+        return droneService.listarDroneDisponivel(disponivel);
     }
 
     @GetMapping("/{id}")
@@ -34,13 +35,12 @@ public class DroneController {
     }
 
     @PostMapping
-    public DroneResponseDTO cadastrar(@RequestBody DroneRequestDTO dto) {
+    public DroneResponseDTO cadastrar(@RequestBody @Validated DroneRequestDTO dto) {
         return droneService.cadastrar(dto);
     }
 
     @PutMapping("/{id}")
-    public DroneResponseDTO atualizar(@PathVariable Long id, @RequestBody DroneRequestDTO dto) {
-        // TODO: conferir se a atualização segue o mesmo padrão do cadastro.
+    public DroneResponseDTO atualizar(@PathVariable Long id, @RequestBody @Validated DroneRequestDTO dto) {
         return droneService.atualizar(id, dto);
     }
 
